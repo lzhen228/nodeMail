@@ -341,4 +341,4 @@ let EmialMinminute= 30;
 ## 最后
 冬天到了，是不是也该用程序员的专业知识给身边的人带来一些温暖呢，源代码与demo已经放到github上，要不试一试？
 
-GitHub：[https://github.com/Vincedream/NodeMail](https://github.com/Vincedream/NodeMail)
+GitHub：[https://github.com/lzhen228/nodeMail](https://github.com/lzhen228/nodeMail)
