@@ -17,6 +17,7 @@
     "debug": "^4.4.3",
     "ejs": "^2.5.7",
     "extend": "^3.0.2",
+    "form-data": "^4.0.4",
     "node-schedule": "^1.2.5",
     "nodemailer": "^4.4.0",
     "superagent": "^3.8.1"
