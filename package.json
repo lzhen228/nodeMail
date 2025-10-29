@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "component-emitter": "^2.0.0",
     "ejs": "^2.5.7",
     "node-schedule": "^1.2.5",
     "nodemailer": "^4.4.0",
