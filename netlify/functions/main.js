@@ -5,6 +5,7 @@ const ejs = require("ejs"); //ejs模版引擎
 const fs = require("fs"); //文件读写
 const path = require("path"); //路径配置
 const schedule = require("node-schedule"); //定时器任务库
+
 //配置项
 
 //纪念日
@@ -145,71 +146,100 @@ function getWeatherData() {
 
 // 发动邮件
 function sendMail(HtmlData) {
-  const template = ejs.compile(
-    fs.readFileSync(path.resolve(__dirname, "email.ejs"), "utf8")
-  );
-  const html = template(HtmlData);
+  return new Promise((resolve, reject) => {
+    const template = ejs.compile(
+      fs.readFileSync(path.resolve(__dirname, "email.ejs"), "utf8")
+    );
+    const html = template(HtmlData);
 
-  let transporter = nodemailer.createTransport({
-    // service: EmianService,
-    host: 'smtp.qq.com',
-    port: 587,
-    secure: false, // 使用 TLS
-    auth: EamilAuth
-  });
+    let transporter = nodemailer.createTransport({
+      // service: EmianService,
+      host: 'smtp.qq.com',
+      port: 587,
+      secure: false, // 使用 TLS
+      auth: EamilAuth
+    });
 
-  let mailOptions = {
-    from: EmailFrom,
-    to: EmailTo,
-    subject: EmailSubject,
-    html: html
-  };
-  transporter.sendMail(mailOptions, (error, info = {}) => {
-    if (error) {
-      console.log(error);
-      sendMail(HtmlData); //再次发送
-    }
-    console.log("邮件发送成功", info.messageId);
-    console.log("静等下一次发送");
+    let mailOptions = {
+      from: EmailFrom,
+      to: EmailTo,
+      subject: EmailSubject,
+      html: html
+    };
+
+    transporter.sendMail(mailOptions, (error, info = {}) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log("邮件发送成功", info.messageId);
+        console.log("静等下一次发送");
+        resolve({
+          statusCode: 200,
+          body: JSON.stringify({ message: "执行成功" })
+        });
+      }
+    });
   });
 }
 
 // 聚合
 function getAllDataAndSendMail() {
-  let HtmlData = {};
-  // how long with
-  let today = new Date();
-  console.log(today)
-  let initDay = new Date(startDay);
-  let lastDay = Math.floor((today - initDay) / 1000 / 60 / 60 / 24);
-  let todaystr =
-    today.getFullYear() +
-    " / " +
-    (today.getMonth() + 1) +
-    " / " +
-    today.getDate();
-  HtmlData["lastDay"] = lastDay;
-  HtmlData["todaystr"] = todaystr;
+  return new Promise((resolve, reject) => {
+    let HtmlData = {};
+    // how long with
+    let today = new Date();
+    console.log(today)
+    let initDay = new Date(startDay);
+    let lastDay = Math.floor((today - initDay) / 1000 / 60 / 60 / 24);
+    let todaystr =
+      today.getFullYear() +
+      " / " +
+      (today.getMonth() + 1) +
+      " / " +
+      today.getDate();
+    HtmlData["lastDay"] = lastDay;
+    HtmlData["todaystr"] = todaystr;
 
-  Promise.all([getOneData(), getWeatherTips(), getWeatherData()]).then(
-    function (data) {
-      HtmlData["todayOneData"] = data[0];
-      HtmlData["weatherTip"] = data[1];
-      HtmlData["threeDaysData"] = data[2];
-      sendMail(HtmlData)
-    }
-  ).catch(function (err) {
-    getAllDataAndSendMail() //再次获取
-    console.log('获取数据失败： ', err);
-  })
+    Promise.all([getOneData(), getWeatherTips(), getWeatherData()]).then(
+      async function (data) {
+        HtmlData["todayOneData"] = data[0];
+        HtmlData["weatherTip"] = data[1];
+        HtmlData["threeDaysData"] = data[2];
+        try {
+          const result = await sendMail(HtmlData);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    ).catch(function (err) {
+      console.log('获取数据失败： ', err);
+      reject(err);
+    })
+  });
 }
 
 let rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0, new schedule.Range(1, 6)];
 rule.hour = EmailHour;
 rule.minute = EmialMinminute;
-console.log('NodeMail: 开始等待目标时刻...')
-let j = schedule.scheduleJob(rule, function () {
-  console.log("执行任务");
-  getAllDataAndSendMail();
-});
+// console.log('NodeMail: 开始等待目标时刻...')
+// let j = schedule.scheduleJob(rule, function () {
+//   console.log("执行任务");
+// });
+exports.handler = async (event) => {
+  try {
+    const result = await getAllDataAndSendMail();
+    return result;
+  } catch (error) {
+    console.error('Lambda function error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "执行失败",
+        error: error.message
+      })
+    };
+  }
+};
