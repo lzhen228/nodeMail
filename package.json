@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "cheerio-select": "^2.1.0",
     "component-emitter": "^2.0.0",
     "cookiejar": "^2.1.4",
     "ejs": "^2.5.7",
