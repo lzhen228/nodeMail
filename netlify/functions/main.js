@@ -187,8 +187,10 @@ function sendMail(HtmlData) {
 function getAllDataAndSendMail() {
   return new Promise((resolve, reject) => {
     let HtmlData = {};
-    // how long with
-    let today = new Date();
+    // Netlify函数运行环境的时区默认是UTC 时区
+    // 北京时间 = UTC时间 + 8小时（8*60*60*1000毫秒）
+    const utcDate = new Date();
+    let today = new Date(utcDate.getTime() + 8 * 60 * 60 * 1000);;
     console.log(today)
     let initDay = new Date(startDay);
     let lastDay = Math.floor((today - initDay) / 1000 / 60 / 60 / 24);
