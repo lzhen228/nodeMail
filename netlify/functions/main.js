@@ -13,7 +13,7 @@ let startDay = "2023/3/31";
 //当地拼音,需要在下面的墨迹天气url确认
 // const local = "hebei/tangshan"
 
-const local = "beijing/xicheng-district";
+const local = "hubei/jiangxia-district";
 
 
 //发送者邮箱厂家
