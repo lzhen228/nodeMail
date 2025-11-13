@@ -1,74 +1,355 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>每日爱的问候</title>
+    <meta
+      name="viewport"
+      content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px 20px;
+        text-align: center;
+        color: white;
+      }
+      .love-days {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      .days-number {
+        font-size: 48px;
+        font-weight: bold;
+        margin: 10px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .date-info {
+        font-size: 16px;
+        opacity: 0.9;
+      }
+      .content {
+        padding: 20px;
+      }
+      .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin: 20px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+      }
+      .today-weather {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .today-weather-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+      .today-weather-main {
+        display: flex;
+        align-items: center;
+      }
+      .today-weather-icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+      }
+      .today-weather-text {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+      }
+      .today-temp {
+        font-size: 28px;
+        font-weight: bold;
+        color: #ff6b6b;
+      }
+      .today-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .detail-item {
+        background: rgba(255, 255, 255, 0.6);
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      .detail-label {
+        color: #666;
+        margin-bottom: 5px;
+      }
+      .detail-value {
+        color: #333;
+        font-weight: 600;
+      }
+      .weather-tips {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 8px;
+        color: #856404;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+      .weather-tips strong {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 15px;
+      }
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .tip-item {
+        background: rgba(255, 255, 255, 0.7);
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+      }
+      .tip-label {
+        font-weight: 600;
+        color: #856404;
+        margin-bottom: 5px;
+        font-size: 13px;
+      }
+      .tip-value {
+        color: #666;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .forecast-container {
+        margin-top: 20px;
+      }
+      .forecast-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        margin: 10px 0;
+        background: #f8f9fa;
+        border-radius: 12px;
+        transition: all 0.3s;
+      }
+      .forecast-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+      }
+      .forecast-item.today {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        border: 2px solid #ff6b6b;
+      }
+      .forecast-day {
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+        min-width: 60px;
+      }
+      .forecast-weather {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        margin: 0 15px;
+      }
+      .forecast-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+      .forecast-temp {
+        font-weight: 600;
+        color: #495057;
+        min-width: 100px;
+      }
+      .aqi-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .aqi-level_1 {
+        background: #d4edda;
+        color: #155724;
+      }
+      .aqi-level_2 {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .aqi-level_3 {
+        background: #ffe5b4;
+        color: #cc8800;
+      }
+      .aqi-level_4 {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .aqi-level_5 {
+        background: #e7d6f8;
+        color: #5f52a0;
+      }
+      .aqi-level_6 {
+        background: #f5c6cb;
+        color: #631541;
+      }
+      .one-section {
+        text-align: center;
+        padding: 30px 20px;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        margin-top: 20px;
+        border-radius: 15px;
+      }
+      .one-title {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+      .one-image {
+        width: 100%;
+        border-radius: 12px;
+        margin: 15px 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .one-type {
+        color: #999;
+        font-size: 13px;
+        margin-top: 10px;
+      }
+      .one-text {
+        margin: 15px auto;
+        max-width: 90%;
+        color: #555;
+        font-size: 15px;
+        line-height: 1.8;
+        font-style: italic;
+      }
+    </style>
+  </head>
 
-<head>
-    <title>
-    </title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-</head>
+  <body>
+    <div class="container">
+      <!-- 顶部爱情天数 -->
+      <div class="header">
+        <div class="love-days">❤️ 今天是我们在一起的第</div>
+        <div class="days-number"><%= lastDay %></div>
+        <div class="love-days">天 ❤️</div>
+        <div class="date-info"><%= todaystr %></div>
+      </div>
 
-<body style="margin:0;padding:0;">
-    <div style="width:100%; margin: 40px auto;font-size:20px; color:#5f5e5e;text-align:center">
-        <span>今天是我们在一起的第</span>
-        <span style="font-size:24px;color:rgb(221, 73, 73)"  > <%= lastDay %> </span>
-        <span>天</span>
-    </div>
-    <div style="width:100%; margin: 0 auto;color:#5f5e5e;text-align:center">
-        <span style="display:block;color:#676767;font-size:20px"><%= weatherTip %></span>
-        <span style="display:block;margin-top:15px;color:#676767;font-size:15px">近期天气预报</span>
-    <% for(var j = 0; j<threeDaysData.length; j++) { %>
-        <div style="display: flex;margin-top:5px;height: 30px;line-height: 30px;justify-content: space-around;align-items: center;">
-            <span style="width:15%; text-align:center;"><%= threeDaysData[j].Day %></span>
-            <div style="width:25%; text-align:center;">
-                <img style="height:26px;vertical-align:middle;" src='<%= threeDaysData[j].WeatherImgUrl %>' alt="">
-                <span style="display:inline-block"><%= threeDaysData[j].WeatherText %></span>
+      <div class="content">
+        <!-- 今日天气详情 -->
+        <% if (threeDaysData && threeDaysData.length > 0) { %>
+        <h2 class="section-title">☀️ 今日天气</h2>
+        <div class="today-weather">
+          <div class="today-weather-header">
+            <div class="today-weather-main">
+              <img
+                class="today-weather-icon"
+                src="<%= threeDaysData[0].WeatherImgUrl %>"
+                alt="天气图标"
+              />
+              <div>
+                <div class="today-weather-text">
+                  <%= threeDaysData[0].WeatherText %>
+                </div>
+              </div>
             </div>
-            <span style="width:25%; text-align:center;"><%= threeDaysData[j].Temperature %></span>
-            
-            
-            <% if (threeDaysData[j].PollutionLevel=='level_1') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#8fc31f; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
-            <% if (threeDaysData[j].PollutionLevel=='level_2') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#d7af0e; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
-            <% if (threeDaysData[j].PollutionLevel=='level_3') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#f39800; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
-            <% if (threeDaysData[j].PollutionLevel=='level_4') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#e2361a; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
-            <% if (threeDaysData[j].PollutionLevel=='level_5') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#5f52a0; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
-            <% if (threeDaysData[j].PollutionLevel=='level_6') { %>
-                <div style="width:35%; ">
-                        <span style="display:inline-block;padding:0 8px;line-height:25px;color:#631541; border-radius:15px; text-align:center;"><%= threeDaysData[j].Pollution %></span>
-                </div>
-            <% }  %>
+            <div class="today-temp"><%= threeDaysData[0].Temperature %></div>
+          </div>
+
+          <div class="today-details">
+            <div class="detail-item">
+              <div class="detail-label">💨 风向风力</div>
+              <div class="detail-value">
+                <%= threeDaysData[0].WindDirection %> <%=
+                threeDaysData[0].WindLevel %>
+              </div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">🌫️ 空气质量</div>
+              <div class="detail-value"><%= threeDaysData[0].Pollution %></div>
+            </div>
+          </div>
         </div>
-    <% } %>
-    </div>
-    <div style="text-align:center;margin:35px 0;">
-            <span style="display:block;margin-top:55px;color:#676767;font-size:15px">ONE · 一个</span>
-            <span style="display:block;margin-top:25px;font-size:22px; color:#9d9d9d; "><%= todaystr %></span>
-             <img src="<%= todayOneData.imgUrl %>" style="width:100%;margin-top:10px;"  alt="">
-             <span style="color:#b0b0b0;font-size:13px;"><%= todayOneData.type %></span>
-             <div style="margin:10px auto;width:85%;color:#5f5e5e;" ><%= todayOneData.text %></div>
-    </div>
-    
+        <% } %>
 
-</body>
+        <!-- 生活指数提醒 -->
+        <% if (weatherTip) { const tips = weatherTip.split(' | '); %>
+        <div class="weather-tips">
+          <strong>💡 温馨提示</strong>
+          <div class="tips-grid">
+            <% tips.forEach(function(tip) { const parts = tip.split(': '); if
+            (parts.length === 2) { %>
+            <div class="tip-item">
+              <div class="tip-label"><%= parts[0] %></div>
+              <div class="tip-value"><%= parts[1] %></div>
+            </div>
+            <% } }); %>
+          </div>
+        </div>
+        <% } %>
 
+        <!-- 三天天气预报 -->
+        <h2 class="section-title">📅 未来天气</h2>
+        <div class="forecast-container">
+          <% for(var j = 0; j < threeDaysData.length; j++) { %>
+          <div class="forecast-item <%= j === 0 ? 'today' : '' %>">
+            <span class="forecast-day"><%= threeDaysData[j].Day %></span>
+            <div class="forecast-weather">
+              <img
+                class="forecast-icon"
+                src="<%= threeDaysData[j].WeatherImgUrl %>"
+                alt="天气"
+              />
+              <span><%= threeDaysData[j].WeatherText %></span>
+            </div>
+            <span class="forecast-temp"
+              ><%= threeDaysData[j].Temperature %></span
+            >
+            <span class="aqi-badge aqi-<%= threeDaysData[j].PollutionLevel %>">
+              <%= threeDaysData[j].Pollution %>
+            </span>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- ONE 一个 -->
+        <h2 class="section-title">📖 ONE · 一个</h2>
+        <div class="one-section">
+          <img
+            src="<%= todayOneData.imgUrl %>"
+            class="one-image"
+            alt="ONE"
+            onerror="this.style.display='none'"
+          />
+          <div class="one-type"><%= todayOneData.type %></div>
+          <div class="one-text"><%= todayOneData.text %></div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
