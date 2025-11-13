@@ -5,7 +5,15 @@ const ejs = require("ejs"); //ejs模版引擎
 const fs = require("fs"); //文件读写
 const path = require("path"); //路径配置
 const schedule = require("node-schedule"); //定时器任务库
-const { SignJWT, importPKCS8 } = require("jose"); //JWT生成库
+
+// 懒加载 ESM-only 的 jose 库, 兼容 Netlify CommonJS 运行时
+let joseModulePromise;
+async function loadJose() {
+  if (!joseModulePromise) {
+    joseModulePromise = import("jose");
+  }
+  return joseModulePromise;
+}
 
 //纪念日
 let startDay = "2023/3/31";
@@ -16,11 +24,11 @@ const cityId = "101200105"; // 江夏区
 // 和风天气API Host (每个开发者独立的API地址)
 const weatherApiHost = 'pj6yvy8dmm.re.qweatherapi.com';
 // 和风天气 JWT 配置
-const privateKey = `-----BEGIN PRIVATE KEY-----
+const YourPrivateKey = `-----BEGIN PRIVATE KEY-----
 MC4CAQAwBQYDK2VwBCIEIF1snuHKew+3jKVc9l23kU+bno19m8wrhEZPOBorrqCm
 -----END PRIVATE KEY-----`; // 你的私钥 (PRIVATE KEY)
-const keyId = 'KEPPBN3BCC'; // 你的 Key ID
-const projectId = '3H2CNJJQMR'; // 你的项目 ID (Project ID)
+const YourKeyId = 'KEPPBN3BCC'; // 你的 Key ID
+const YourProjectId = '3H2CNJJQMR'; // 你的项目 ID (Project ID)
 
 
 let EamilAuth = {
@@ -52,15 +60,16 @@ const WeatherAirUrl = `https://${weatherApiHost}/v7/air/now`;
 // 生成和风天气JWT Token
 async function generateWeatherJWT() {
   try {
-    const privateKey = await importPKCS8(privateKey, 'EdDSA');
+    const { SignJWT, importPKCS8 } = await loadJose();
+    const privateKey = await importPKCS8(YourPrivateKey, 'EdDSA');
     const customHeader = {
       alg: 'EdDSA',
-      kid: keyId
+      kid: YourKeyId
     };
     const iat = Math.floor(Date.now() / 1000) - 30;
     const exp = iat + 900; // 15分钟有效期
     const customPayload = {
-      sub: projectId,
+      sub: YourProjectId,
       iat: iat,
       exp: exp
     };
