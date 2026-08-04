@@ -1,0 +1,30 @@
+{
+  "name": "node-mail",
+  "version": "1.1.0",
+  "description": "Netlify Function for sending daily weather and ONE emails.",
+  "type": "module",
+  "main": "netlify/functions/main.js",
+  "scripts": {
+    "dev": "tsx --env-file=.env scripts/run-local.js",
+    "send": "tsx --env-file=.env scripts/run-local.js --send-now",
+    "check": "tsx --check netlify/functions/main.js",
+    "check:node": "node --check netlify/functions/main.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@netlify/functions": "^3.1.10",
+    "@react-email/render": "^2.0.0",
+    "cheerio": "^1.1.2",
+    "jose": "^6.1.1",
+    "nodemailer": "^7.0.5",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  },
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
+}
